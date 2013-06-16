@@ -2,9 +2,192 @@ var infowindow;
 var map;
 var geocoder;
 
+var selectedUsers = [];
+var users = [];
+var markerArray = [];
+users[0] = new Object
+users[0].name = "hao"
+users[0].lat = 37.37711451576145
+users[0].lng = -121.91399574279785
+users[1] = new Object
+users[1].name = "cris"
+users[1].lat = 37.37997911184045
+users[1].lng = -121.90841674804688
+users[2] = new Object
+users[2].name = "sunny"
+users[2].lat = 37.38795848110175
+users[2].lng = -121.9233512878418
+users[3] = new Object
+users[3].name = "mike"
+users[3].lat = 37.37247636632477
+users[3].lng = -121.92858695983887
+users[4] = new Object
+users[4].name = "jon"
+users[4].lat = 37.37554576202032
+users[4].lng = -121.93519592285156
+
 function load() {
 	navigator.geolocation.getCurrentPosition(userLocation, error);
 }
+
+
+function initialize(lat, lng) {
+
+	var mapOptions = {
+		zoom: 14,
+		center: new google.maps.LatLng(lat, lng),
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+
+	geocoder = new google.maps.Geocoder();
+	map = new google.maps.Map(document.getElementById('map-canvas'),
+		mapOptions);
+
+	var marker = new google.maps.Marker({
+		map: map,
+		position: new google.maps.LatLng(lat, lng),
+		zIndex: 1,
+		icon: 'img/me.png'
+	});
+
+	google.maps.event.addListener(marker, 'click', function() {
+		if (infowindow) infowindow.close();
+		infowindow = new google.maps.InfoWindow({
+			content: generateInfo(),
+			maxWidth: 310
+		});
+		infowindow.open(map, marker);
+	});
+
+	var myCity = new google.maps.Circle({
+		center: new google.maps.LatLng(lat, lng),
+		radius: 1000,
+		strokeColor: "orange",
+		strokeOpacity: 0.8,
+		strokeWeight: 2,
+		fillColor: "orange",
+		fillOpacity: 0.4,
+		draggable: false,
+		editable: true,
+		clickable: false
+	});
+	for (var i = 0; i < users.length; i++) {
+		var distance = meterToMi(myCity.getRadius()) * 1.60934
+		if (haversine(lat, lng, users[i].lat, users[i].lng, distance)) {
+			console.log(users[i].name);
+			var marker = new google.maps.Marker({
+				map: map,
+				position: new google.maps.LatLng(users[i].lat, users[i].lng),
+				zIndex: 1,
+				icon: 'img/me.png'
+			});
+			markerArray.push(marker);
+		}
+	};
+
+	myCity.setMap(map);
+	google.maps.event.addListener(myCity, 'radius_changed', function() {
+		console.log(meterToMi(myCity.getRadius()));
+		clearOverlays();
+		for (var i = 0; i < users.length; i++) {
+			var distance = meterToMi(myCity.getRadius()) * 1.60934
+			if (haversine(lat, lng, users[i].lat, users[i].lng, distance)) {
+				console.log(users[i].name);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: new google.maps.LatLng(users[i].lat, users[i].lng),
+					zIndex: 1,
+					icon: 'img/me.png'
+				});
+				markerArray.push(marker);
+			}
+		};
+		// findUsers();
+	});
+	google.maps.event.addListener(map, 'click', function(event) {
+		console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
+	});
+
+}
+
+function findUsers() {
+	var distance = meterToMi(myCity.getRadius());
+	for (var i = 0; i < data.length; i++) {
+		if (haversine(lat, lng, data[i].lat, data[i].lng, distance)) {
+			var userMarker = new google.maps.Marker({
+				map: map,
+				position: new google.maps.LatLng(data[i].lat, data[i].lng),
+				icon: data[i].url,
+				title: data[i].title
+			});
+			google.maps.event.addListener(userMarker, 'click', function() {
+				selectedUsers.push(this.getTitle());
+			});
+		}
+	};
+
+}
+
+function codeAddress(place) {
+
+	var address = place;
+
+	geocoder.geocode({
+		'address': address
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			map.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+				map: map,
+				position: results[0].geometry.location
+			});
+		} else {
+			alert("Geocode was not successful for the following reason: " + status);
+		}
+	});
+}
+
+function generateInfo() {
+	text = '<div class="marker">';
+	text += '<p> This is you! </p>';
+	text += '</div>';
+	return text;
+}
+
+function haversine(nlat, nlong, mlat, mlong, distance) {
+
+	var R = 6371; // radius of earth in km
+	var distances = [];
+	var closest = -1;
+	var dLat = rad(mlat - nlat);
+	var dLong = rad(mlong - nlong);
+	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(nlat)) * Math.cos(rad(nlat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	var d = R * c;
+	if (d < distance) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+function rad(x) {
+	return x * Math.PI / 180;
+}
+
+function meterToMi(distanceFt) {
+	return distanceFt / 1609.24;
+}
+
+function clearOverlays() {
+
+	var size = markerArray.length;
+	for (var i = 0; i < size; i++) {
+		var marker = markerArray.pop();
+		marker.setMap(null);
+	}
+}
+google.maps.event.addDomListener(window, 'load', load)
 
 var userLocation = function(pos) {
 	var lat = pos.coords.latitude;
@@ -17,103 +200,3 @@ var error = function(error) {
 		alert('Unable to get location');
 	}
 }
-
-	function initialize(lat, lng) {
-
-		var mapOptions = {
-			zoom: 13,
-			center: new google.maps.LatLng(lat, lng),
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-
-		geocoder = new google.maps.Geocoder();
-		map = new google.maps.Map(document.getElementById('map-canvas'),
-			mapOptions);
-
-		var marker = new google.maps.Marker({
-			map: map,
-			position: new google.maps.LatLng(lat, lng),
-			zIndex: 1
-		});
-
-		google.maps.event.addListener(marker, 'click', function() {
-			if (infowindow) infowindow.close();
-			infowindow = new google.maps.InfoWindow({
-				content: generateInfo(),
-				maxWidth: 310
-			});
-			infowindow.open(map, marker);
-		});
-
-		var myCity = new google.maps.Circle({
-			center: new google.maps.LatLng(lat, lng),
-			radius:2000,
-			strokeColor:"#0000FF",
-			strokeOpacity:0.8,
-			strokeWeight:2,
-			fillColor:"#0000FF",
-			fillOpacity:0.4,
-			draggable:false,
-			editable:true,
-			clickable:false
-		});
-
-		myCity.setMap(map);
-		google.maps.event.addListener(myCity, 'radius_changed',  function() {
-			myCity.getRadius();
-		});
-
-	}
-
-	function codeAddress(place) {
-
-		var address = place;
-
-		geocoder.geocode({
-			'address': address
-		}, function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				map.setCenter(results[0].geometry.location);
-				var marker = new google.maps.Marker({
-					map: map,
-					position: results[0].geometry.location
-				});
-			} else {
-				alert("Geocode was not successful for the following reason: " + status);
-			}
-		});
-	}
-
-	function generateInfo() {
-		text = '<div class="marker">';
-		text += '<p> This is you! </p>';
-		text += '</div>';
-		return text;
-	}
-
-	function haversine(nlat, nlong, mlat, mlong, distance) {
-
-		var R = 6371; // radius of earth in km
-		var distances = [];
-		var closest = -1;
-		var dLat = rad(mlat - nlat);
-		var dLong = rad(mlong - nlong);
-		var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(nlat)) * Math.cos(rad(nlat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
-		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		var d = R * c;
-		if (d < distance) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-
-	function rad(x) {
-		return x * Math.PI / 180;
-	}
-
-	function MeterToMi(distanceFt) {
-		return distanceFt / 1609.24;
-	}
-
-google.maps.event.addDomListener(window, 'load', load)
