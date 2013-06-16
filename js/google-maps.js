@@ -45,6 +45,24 @@ var error = function(error) {
 			infowindow.open(map, marker);
 		});
 
+		var myCity = new google.maps.Circle({
+			center: new google.maps.LatLng(lat, lng),
+			radius:2000,
+			strokeColor:"#0000FF",
+			strokeOpacity:0.8,
+			strokeWeight:2,
+			fillColor:"#0000FF",
+			fillOpacity:0.4,
+			draggable:false,
+			editable:true,
+			clickable:false
+		});
+
+		myCity.setMap(map);
+		google.maps.event.addListener(myCity, 'radius_changed',  function() {
+			myCity.getRadius();
+		});
+
 	}
 
 	function codeAddress(place) {
