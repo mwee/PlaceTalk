@@ -7,6 +7,7 @@ var selectedUsers = [];
 var users = [];
 var markerArray = [];
 var currName;
+var myCity;
 users[0] = new Object
 users[0].name = "hao"
 users[0].lat = 37.37711451576145
@@ -65,7 +66,7 @@ function initMap() {
 
 function createCircle() {
 	currName = $('#userInput').val().trim();
-	var myCity = new google.maps.Circle({
+	myCity = new google.maps.Circle({
 		center: new google.maps.LatLng(lat, lng),
 		radius: 25,
 		strokeColor: "orange",
@@ -77,6 +78,7 @@ function createCircle() {
 		editable: true,
 		clickable: false
 	});
+	clearOverlays();
 	for (var i = 1; i < database.length; i++) {
 		var distance = meterToMi(myCity.getRadius()) * 1.60934
 		console.log("lat-" + database[i].data.lat);
