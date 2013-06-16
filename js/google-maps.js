@@ -80,6 +80,7 @@ function createCircle() {
 		clickable: false
 	});
 	clearOverlays();
+
 	createMarkers();
 	myCity.setMap(map);
 	google.maps.event.addListener(myCity, 'radius_changed', function() {
@@ -91,22 +92,32 @@ function createCircle() {
 }
 
 function createMarkers() {
-	for (var i = 1; i < users.length; i++) {
-		var distance = meterToMi(myCity.getRadius()) * 1.60934
+	console.log("entter Marker");
+	for (var i = 1; i < database.length; i++) {
+		var distance = meterToMi(myCity.getRadius()) * 1.60934;
+		console.log(i+ ". distance = " + distance);
+		console.log(i+ ". name = " + database[i].name);
+		console.log(i+ ". coord: " + database[i].data.lat + "," + database[i].data.lng);
+		console.log(i+ ". your coord: " + lat + "," + lng);
 		if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {
 			if (currName != database[i].name) {
+				console.log("inside");
 				var marker = new google.maps.Marker({
 					map: map,
 					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
 					zIndex: 1,
-					icon: 'img/me.png',
+					icon: 'img/Logo.png',
 					title: database[i].name
 				});
 				google.maps.event.addListener(marker, 'click', function() {
-					console.log(1);
+					selectedUsers.push(this.title);
 				});
 				google.maps.event.addListener(marker, 'dblclick', function() {
-					console.log(2);
+					for (var i = 0; i < selectedUser.length; i++) {
+						if (selectedUsers[i] == marker.title) {
+							selectedUsers.splice(i, 1);
+						}
+					};
 				});
 				markerArray.push(marker);
 			}
@@ -114,23 +125,6 @@ function createMarkers() {
 	};
 }
 
-function findUsers() {
-	var distance = meterToMi(myCity.getRadius());
-	for (var i = 0; i < data.length; i++) {
-		if (haversine(lat, lng, data[i].lat, data[i].lng, distance)) {
-			var userMarker = new google.maps.Marker({
-				map: map,
-				position: new google.maps.LatLng(data[i].lat, data[i].lng),
-				icon: data[i].url,
-				title: data[i].title
-			});
-			google.maps.event.addListener(userMarker, 'click', function() {
-				selectedUsers.push(this.getTitle());
-			});
-		}
-	};
-
-}
 
 function codeAddress(place) {
 
@@ -168,6 +162,7 @@ function haversine(nlat, nlong, mlat, mlong, distance) {
 	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(nlat)) * Math.cos(rad(nlat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	var d = R * c;
+	console.log("haver - "+d);
 	if (d < distance) {
 		return 1;
 	} else {

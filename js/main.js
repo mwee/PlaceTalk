@@ -12,6 +12,7 @@ $(document).ready(function() {
 	myDataRef.on('child_added', function(snapshot) {
 		var message = snapshot.val();
 		database.push(message);
+		
 		databaseID.push(snapshot.ref().toString());
 	});
 	
