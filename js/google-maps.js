@@ -1,7 +1,7 @@
 var infowindow;
 var map;
 var geocoder;
-var hasInitMap = false;
+
 
 var selectedUsers = [];
 var users = [];
@@ -27,7 +27,7 @@ users[4].name = "jon"
 users[4].lat = 37.37554576202032
 users[4].lng = -121.93519592285156
 
-function load() {
+function loadMap() {
 	navigator.geolocation.getCurrentPosition(userLocation, error);
 }
 
@@ -188,7 +188,7 @@ function clearOverlays() {
 		marker.setMap(null);
 	}
 }
-google.maps.event.addDomListener(window, 'load', load)
+// google.maps.event.addDomListener(window, 'load', load)
 
 var userLocation = function(pos) {
 	var lat = pos.coords.latitude;
