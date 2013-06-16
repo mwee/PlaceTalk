@@ -3,21 +3,27 @@ var databaseID = [];
 var database = [];
 var myDataRef = new Firebase('https://rla9jpcgz6r.firebaseio-demo.com/');
 
+
 $(document).ready(function() {
 	load();
 	$('.send_message').on('click', function() {
 
 	});
-	myDataRef.on('child_added', function(snapshot) {
-		var message = snapshot.val();
-		database.push(message);
-		databaseID.push(snapshot.ref().toString());
-		// console.log(message);
-		// displayChatMessage(message.name, message.pass, message.data.lat, message.data.lng);
-	});
-
-
+	getData();
+	
 });
+
+function getData() {
+	setTimeout(function() {
+		myDataRef.on('child_added', function(snapshot) {
+			var message = snapshot.val();
+			database.push(message);
+			databaseID.push(snapshot.ref().toString());
+		});
+		console.log("rerun");
+		getData();
+	}, 5000);
+}
 
 $(document).delegate('#page2', 'pageshow', function() {
 	// alert(1);
@@ -32,6 +38,7 @@ $(document).delegate('#page2', 'pageshow', function() {
 function submit() {
 
 	var createNew = true;
+	
 	var name = $('#userInput').val().trim();
 	var pass = $('#passInput').val().trim();
 	var data = new Object();
@@ -55,7 +62,6 @@ function submit() {
 			data: data
 		});
 	}
-
 	// function displayChatMessage(name, pass, lat, lng) {
 	// 	$('.msg').html("<a><br>name: " + name + "<br>pass: " + pass + "<br> lat: " + lat + "<br> lng: " + lng + "</a>")
 	// 	// $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;

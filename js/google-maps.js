@@ -59,7 +59,11 @@ function initMap() {
 		});
 		infowindow.open(map, marker);
 	});
+	createCircle();
+}
 
+function createCircle() {
+	var currName = $('#userInput').val().trim();
 	var myCity = new google.maps.Circle({
 		center: new google.maps.LatLng(lat, lng),
 		radius: 1000,
@@ -76,14 +80,16 @@ function initMap() {
 		var distance = meterToMi(myCity.getRadius()) * 1.60934
 		console.log("lat-" + database[i].data.lat);
 		console.log("name-" + database[i].name);
-		if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {			
-			var marker = new google.maps.Marker({
-				map: map,
-				position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
-				zIndex: 1,
-				icon: 'img/me.png'
-			});
-			markerArray.push(marker);
+		if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {
+			if (currName != database[i].name) {
+				var marker = new google.maps.Marker({
+					map: map,
+					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
+					zIndex: 1,
+					icon: 'img/me.png'
+				});
+				markerArray.push(marker);
+			}
 		}
 	};
 
@@ -94,14 +100,15 @@ function initMap() {
 		for (var i = 1; i < users.length; i++) {
 			var distance = meterToMi(myCity.getRadius()) * 1.60934
 			if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {
-				console.log(database[i].name);
-				var marker = new google.maps.Marker({
-					map: map,
-					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
-					zIndex: 1,
-					icon: 'img/me.png'
-				});
-				markerArray.push(marker);
+				if (currName != database[i].name) {
+					var marker = new google.maps.Marker({
+						map: map,
+						position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
+						zIndex: 1,
+						icon: 'img/me.png'
+					});
+					markerArray.push(marker);
+				}
 			}
 		};
 		// findUsers();
@@ -111,7 +118,6 @@ function initMap() {
 	});
 
 }
-
 
 function findUsers() {
 	var distance = meterToMi(myCity.getRadius());
