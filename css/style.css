@@ -37,3 +37,30 @@ h3{
 	text-shadow: 0 0px 0 white !important;
 
 }
+
+.homeLogo {
+	position: absolute;
+	top: 20%;
+	left: 30% !important;
+	width: 40%;
+	height: 30%;
+	margin: auto !important;
+}
+
+.filler{
+	height: 50%;
+}
+
+.loginField {
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.passField {
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.homeSubmit {
+	
+}
