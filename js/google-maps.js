@@ -79,6 +79,7 @@ function createCircle() {
 		editable: true,
 		clickable: false
 	});
+	clearOverlays();
 	createMarkers();
 	myCity.setMap(map);
 	google.maps.event.addListener(myCity, 'radius_changed', function() {
