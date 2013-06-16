@@ -36,7 +36,7 @@ function load() {
 function initMap() {
 
 	var mapOptions = {
-		zoom: 14,
+		zoom: 19,
 		center: new google.maps.LatLng(lat, lng),
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
@@ -67,7 +67,7 @@ function createCircle() {
 	currName = $('#userInput').val().trim();
 	var myCity = new google.maps.Circle({
 		center: new google.maps.LatLng(lat, lng),
-		radius: 1000,
+		radius: 25,
 		strokeColor: "orange",
 		strokeOpacity: 0.8,
 		strokeWeight: 2,
@@ -88,6 +88,14 @@ function createCircle() {
 					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
 					zIndex: 1,
 					icon: 'img/me.png'
+				});
+				google.maps.event.addListener(marker, 'click', function() {
+					if (infowindow) infowindow.close();
+					infowindow = new google.maps.InfoWindow({
+						content: generateInfo(),
+						maxWidth: 310
+					});
+					infowindow.open(map, marker);
 				});
 				markerArray.push(marker);
 			}

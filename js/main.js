@@ -9,21 +9,21 @@ $(document).ready(function() {
 	$('.send_message').on('click', function() {
 
 	});
-	getData();
+	myDataRef.on('child_added', function(snapshot) {
+		var message = snapshot.val();
+		database.push(message);
+		databaseID.push(snapshot.ref().toString());
+	});
 	
 });
 
-function getData() {
-	setTimeout(function() {
-		myDataRef.on('child_added', function(snapshot) {
-			var message = snapshot.val();
-			database.push(message);
-			databaseID.push(snapshot.ref().toString());
-		});
-		console.log("rerun");
-		getData();
-	}, 5000);
-}
+// function getData() {
+// 	setTimeout(function() {
+		
+// 		console.log("rerun");
+// 		getData();
+// 	}, 5000);
+// }
 
 $(document).delegate('#page2', 'pageshow', function() {
 	// alert(1);
