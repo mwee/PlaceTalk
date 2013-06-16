@@ -85,8 +85,9 @@ function createCircle() {
 	myCity.setMap(map);
 	google.maps.event.addListener(myCity, 'radius_changed', function() {
 		console.log(meterToMi(myCity.getRadius()));
+		selctedUsers = [];
 		clearOverlays();
-		createMarkers()
+		createMarkers();
 	});
 
 }
@@ -106,11 +107,13 @@ function createMarkers() {
 					map: map,
 					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
 					zIndex: 1,
-					icon: 'img/Logo.png',
-					title: database[i].name
+					icon: 'img/'+"Logo" +'.png',
+					title: database[i].name + ": " + database[i].data.phone
 				});
 				google.maps.event.addListener(marker, 'click', function() {
-					selectedUsers.push(this.title);
+					var split = this.title.split(': ');
+					console.log(split[1]);
+					selectedUsers.push(split[1]);
 				});
 				google.maps.event.addListener(marker, 'dblclick', function() {
 					for (var i = 0; i < selectedUser.length; i++) {

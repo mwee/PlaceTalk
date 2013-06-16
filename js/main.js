@@ -12,10 +12,10 @@ $(document).ready(function() {
 	myDataRef.on('child_added', function(snapshot) {
 		var message = snapshot.val();
 		database.push(message);
-		
+
 		databaseID.push(snapshot.ref().toString());
 	});
-	
+
 });
 
 
@@ -30,7 +30,7 @@ $(document).delegate('#page2', 'pageshow', function() {
 });
 
 function submit() {
-	
+
 	var name = $('#userInput').val().trim();
 	var pass = $('#passInput').val().trim();
 	var createNew = true;
@@ -45,7 +45,9 @@ function submit() {
 		}
 	};
 	if (createNew) {
+		data.phone = "+18888888888";
 		myDataRef.push({
+
 			name: name,
 			pass: pass,
 			data: data
@@ -99,4 +101,10 @@ function refresh() {
 
 	myCity.setMap(null);
 	createCircle();
+}
+
+function doSomething() {
+	console.log("yay!");
+	$.get("somepage.php");
+	return false;
 }
