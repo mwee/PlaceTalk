@@ -11,7 +11,7 @@
 	<title></title>
 </head>
 <body>
-	<div data-role="page" id="page2">
+<div data-role="page" id="page2">
 
 		<div data-role="header" class="header_bar">
 
@@ -21,13 +21,17 @@
 		</h1>
 		<img src="img/ViewMessages.png" class="ui-btn-right"></a>
 
-	</div>
+</div>
 
-	<div data-role="content" class="content_area">
+<div data-role="content" class="content_area">
 	<div id="map-canvas" style="width: 100%; height: 90%; position: absolute;"></div>
-	<div data-role="popup" id="popupBasic" data-overlay-theme="a">
-		<textarea class="message_box">Hello</textarea>
-		<a data-role="button" id="bGun" href="#page1" title="A button">Post</a>
+	<div data-role="popup" id="popupBasic" data-overlay-theme="a" >
+
+		<div data-role="content" class="message">
+			<textarea class="message_box">Hello</textarea>
+			<a data-theme="a" data-role="button" id="bGun" href="#page1" class="post">Post</a>
+		</div>
+
 	</div>
 
 	<div data-role="footer" data-id="fixedFooter" data-position="fixed" data-tap-toggle="false">
@@ -37,8 +41,8 @@
 		</h3>
 
 	</div>
-	</div>
-	</div>
+</div>
+</div>
 
 </body>
 </html>
