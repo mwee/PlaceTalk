@@ -1,8 +1,8 @@
 var infowindow;
 var map;
 var geocoder;
-
-
+var lat;
+var lng;
 var selectedUsers = [];
 var users = [];
 var markerArray = [];
@@ -27,12 +27,12 @@ users[4].name = "jon"
 users[4].lat = 37.37554576202032
 users[4].lng = -121.93519592285156
 
-function loadMap() {
+function load() {
 	navigator.geolocation.getCurrentPosition(userLocation, error);
 }
 
 
-function initialize(lat, lng) {
+function initMap() {
 
 	var mapOptions = {
 		zoom: 14,
@@ -72,13 +72,14 @@ function initialize(lat, lng) {
 		editable: true,
 		clickable: false
 	});
-	for (var i = 0; i < users.length; i++) {
+	for (var i = 1; i < database.length; i++) {
 		var distance = meterToMi(myCity.getRadius()) * 1.60934
-		if (haversine(lat, lng, users[i].lat, users[i].lng, distance)) {
-			console.log(users[i].name);
+		console.log("lat-" + database[i].data.lat);
+		console.log("name-" + database[i].name);
+		if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {			
 			var marker = new google.maps.Marker({
 				map: map,
-				position: new google.maps.LatLng(users[i].lat, users[i].lng),
+				position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
 				zIndex: 1,
 				icon: 'img/me.png'
 			});
@@ -90,13 +91,13 @@ function initialize(lat, lng) {
 	google.maps.event.addListener(myCity, 'radius_changed', function() {
 		console.log(meterToMi(myCity.getRadius()));
 		clearOverlays();
-		for (var i = 0; i < users.length; i++) {
+		for (var i = 1; i < users.length; i++) {
 			var distance = meterToMi(myCity.getRadius()) * 1.60934
-			if (haversine(lat, lng, users[i].lat, users[i].lng, distance)) {
-				console.log(users[i].name);
+			if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {
+				console.log(database[i].name);
 				var marker = new google.maps.Marker({
 					map: map,
-					position: new google.maps.LatLng(users[i].lat, users[i].lng),
+					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
 					zIndex: 1,
 					icon: 'img/me.png'
 				});
@@ -110,6 +111,7 @@ function initialize(lat, lng) {
 	});
 
 }
+
 
 function findUsers() {
 	var distance = meterToMi(myCity.getRadius());
@@ -191,9 +193,8 @@ function clearOverlays() {
 // google.maps.event.addDomListener(window, 'load', load)
 
 var userLocation = function(pos) {
-	var lat = pos.coords.latitude;
-	var lng = pos.coords.longitude;
-	initialize(lat, lng);
+	lat = pos.coords.latitude;
+	lng = pos.coords.longitude;
 }
 
 var error = function(error) {
