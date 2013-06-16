@@ -1,0 +1,73 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+.content_area{
+	padding: 0px !important;
+}
+.logo_title{
+	/*font-family: 'Adobe Caslon Pro';*/
+	color: #F7984B;
+	font-size: 25px;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+h3{
+	padding: 6 !important;
+}
+.ui-footer {
+    /* Use !important to ensure the target style will be overridden! */
+    border: none !important; 
+
+}
+.message_box{
+
+	background-color:rgba(205,201,201,.5);
+	font-family: 'Adobe Caslon Pro';
+	font-weight: bold;
+	color: #F7984B;
+	/*min-height: 15% !important;*/
+	/*max-height: 15% !important;*/
+	/*width: 80% !important;*/
+	left: 10%;
+	z-index: 99;
+	/*top: 70%;*/
+	border: 2px solid #F7984B;
+	/*position: absolute;*/
+	text-shadow: 0 0px 0 white !important;
+
+}
+<<<<<<< HEAD
+.message{
+	background-color: black !important;
+}
+=======
+
+.homeLogo {
+	position: absolute;
+	top: 20%;
+	left: 30% !important;
+	width: 40%;
+	height: 30%;
+	margin: auto !important;
+}
+
+.filler{
+	height: 50%;
+}
+
+.loginField {
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.passField {
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.homeSubmit {
+	
+}
+>>>>>>> 667483ffdb976b525fbd8304a892bbc48b33b50f
