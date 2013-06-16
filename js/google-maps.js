@@ -1,6 +1,7 @@
 var infowindow;
 var map;
 var geocoder;
+var hasInitMap = false;
 
 var selectedUsers = [];
 var users = [];

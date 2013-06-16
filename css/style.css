@@ -41,3 +41,31 @@ h3{
 .message{
 	background-color: black !important;
 }
+
+
+.homeLogo {
+	position: absolute;
+	top: 20%;
+	left: 30% !important;
+	width: 40%;
+	height: 30%;
+	margin: auto !important;
+}
+
+.filler{
+	height: 50%;
+}
+
+.loginField {
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.passField {
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.homeSubmit {
+	
+}

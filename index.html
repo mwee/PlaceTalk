@@ -11,11 +11,55 @@
 	<title></title>
 </head>
 <body>
+	<!-- Home -->
+	<div data-role="page" id="page1" class= "back">
+		<div data-role="header" class="header_bar">
+			<h1>
+				<div class="logo_title">PlaceTalk</div>
+			</h1>
+		</div>
+
+		<div data-role="content" class="content_area">
+			<img src="img/Logo.png" class="homeLogo">
+			<img src="img/Logo.png" class="filler" style="opacity: 0">
+			<!-- <img src="img/safeWalk_no_icon.png" class="logo"> -->
+			<!-- <img src="img/safeWalk_no_icon.png" class="filler" style="opacity: 0"> -->
+
+			<div class="but_area">
+				<div data-role="fieldcontain" class = "input_field loginField">
+					<input type="text" value="" tabIndex="7" data-theme="d" placeholder="Username"/>
+				</div>
+				<div data-role="fieldcontain" class = "input_field passField" >
+					<input type="text" value="" tabIndex="7" data-theme="d" placeholder="Password"/>
+				</div>
+
+				<div class="homeSubmit">
+					<a href="#page2" onclick= "javascript:submit()"data-role="button" class="submit" data-corners="true" data-mini="true" data-theme="d" tabIndex="9">Login Now!</a>
+				</div>
+			</div>
+			<div data-role="popup" id="popupOptions" data-corners="false" data-theme="none" data-shadow="false" data-tolerance="0,0">
+				<div class="options"></div>
+				<div class="options"></div>
+				<div class="options"></div>
+			</div>
+
+		</div>
+		<div data-role="footer" data-id="fixedFooter" data-position="fixed" data-tap-toggle="false">
+			<h3>
+				<!-- <a href="#popupBasic" data-rel="popup" data-transition="pop" data-position-to="window" data-overlay-theme="a"> -->
+					<!-- <img src="img/NewMessage.png" class="ui-btn-right send_message"></a> -->
+			</h3>
+
+		</div>
+
+	</div>
+
+	<!-- Main Page -->
 <div data-role="page" id="page2">
 
 		<div data-role="header" class="header_bar">
 
-			<img src="img/Logo.png" class="ui-btn-left"></a>
+		<img src="img/Logo.png" class="ui-btn-left"></a>
 		<h1>
 			<div class="logo_title">PlaceTalk</div>
 		</h1>
