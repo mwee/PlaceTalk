@@ -7,6 +7,8 @@ var selectedUsers = [];
 var users = [];
 var markerArray = [];
 var currName;
+var myCity;
+
 users[0] = new Object
 users[0].name = "hao"
 users[0].lat = 37.37711451576145
@@ -65,7 +67,7 @@ function initMap() {
 
 function createCircle() {
 	currName = $('#userInput').val().trim();
-	var myCity = new google.maps.Circle({
+	myCity = new google.maps.Circle({
 		center: new google.maps.LatLng(lat, lng),
 		radius: 25,
 		strokeColor: "orange",
@@ -77,55 +79,38 @@ function createCircle() {
 		editable: true,
 		clickable: false
 	});
-	for (var i = 1; i < database.length; i++) {
+	createMarkers();
+	myCity.setMap(map);
+	google.maps.event.addListener(myCity, 'radius_changed', function() {
+		console.log(meterToMi(myCity.getRadius()));
+		clearOverlays();
+		createMarkers()
+	});
+
+}
+
+function createMarkers() {
+	for (var i = 1; i < users.length; i++) {
 		var distance = meterToMi(myCity.getRadius()) * 1.60934
-		console.log("lat-" + database[i].data.lat);
-		console.log("name-" + database[i].name);
 		if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {
 			if (currName != database[i].name) {
 				var marker = new google.maps.Marker({
 					map: map,
 					position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
 					zIndex: 1,
-					icon: 'img/me.png'
+					icon: 'img/me.png',
+					title: database[i].name
 				});
 				google.maps.event.addListener(marker, 'click', function() {
-					if (infowindow) infowindow.close();
-					infowindow = new google.maps.InfoWindow({
-						content: generateInfo(),
-						maxWidth: 310
-					});
-					infowindow.open(map, marker);
+					console.log(1);
+				});
+				google.maps.event.addListener(marker, 'dblclick', function() {
+					console.log(2);
 				});
 				markerArray.push(marker);
 			}
 		}
 	};
-
-	myCity.setMap(map);
-	google.maps.event.addListener(myCity, 'radius_changed', function() {
-		console.log(meterToMi(myCity.getRadius()));
-		clearOverlays();
-		for (var i = 1; i < users.length; i++) {
-			var distance = meterToMi(myCity.getRadius()) * 1.60934
-			if (haversine(lat, lng, database[i].data.lat, database[i].data.lng, distance)) {
-				if (currName != database[i].name) {
-					var marker = new google.maps.Marker({
-						map: map,
-						position: new google.maps.LatLng(database[i].data.lat, database[i].data.lng),
-						zIndex: 1,
-						icon: 'img/me.png'
-					});
-					markerArray.push(marker);
-				}
-			}
-		};
-		// findUsers();
-	});
-	google.maps.event.addListener(map, 'click', function(event) {
-		console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
-	});
-
 }
 
 function findUsers() {

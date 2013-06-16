@@ -17,13 +17,6 @@ $(document).ready(function() {
 	
 });
 
-// function getData() {
-// 	setTimeout(function() {
-		
-// 		console.log("rerun");
-// 		getData();
-// 	}, 5000);
-// }
 
 $(document).delegate('#page2', 'pageshow', function() {
 	// alert(1);
