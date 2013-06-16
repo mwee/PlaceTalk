@@ -94,4 +94,8 @@ var error = function(error) {
 		return x * Math.PI / 180;
 	}
 
+	function MeterToMi(distanceFt) {
+		return distanceFt / 1609.24;
+	}
+
 google.maps.event.addDomListener(window, 'load', load)
