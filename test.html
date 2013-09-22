@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src='https://cdn.firebase.com/v0/firebase-auth-client.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+    <script type="text/javascript" src="firetub.js"></script>
+
+    <link rel='stylesheet' type='text/css' href='https://www.firebase.com/css/example.css'>
+  </head>
+  <body>
+    <input id="login" type="text">
+    <input id="pass" type="password">
+    <a href="#" onclick="onLoginButtonClicked()">Login</a>
+    <a href="#" onclick="onRegisterButtonClicked()">Register</a>
+
+
+
+    <div id='messagesDiv'></div>
+    <input type='text' id='nameInput' placeholder='Name'>
+    <input type='text' id='messageInput' placeholder='Message'>
+
+
+
+    <script>
+      var myDataRef = new Firebase('https://placetalk.firebaseio.com/');
+      $('#messageInput').keypress(function (e) {
+        if (e.keyCode == 13) {
+          var name = $('#nameInput').val();
+          var text = $('#messageInput').val();
+          myDataRef.push({name: name, text: text});
+          $('#messageInput').val('');
+        }
+      });
+      myDataRef.on('child_added', function(snapshot) {
+        var message = snapshot.val();
+        displayChatMessage(message.name, message.text);
+      });
+
+
+      function displayChatMessage(name, text) {
+        $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+      };
+
+
+      function onRegisterButtonClicked() {
+        var email = $("#login").val();
+        var password = $("#pass").val();
+        authClient.createUser(email, password, function(error, user) {
+        if (!error) {
+          console.log('User Id: ' + user.id + ', Email: ' + user.email);
+        }
+        });
+        console.log(email)
+      }
+
+    function onLoginButtonClicked() {
+
+    var loginInput = $("#login").val();
+    var pass = $("#pass").val();
+    console.log(loginInput);
+    console.log(pass);
+
+  authClient.login("password", {
+  email: loginInput,
+    password: pass
+  });
+}
+
+    </script>
+  </body>
+</html>

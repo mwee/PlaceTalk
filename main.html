@@ -1,0 +1,73 @@
+<html>
+<head>
+  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+  <script type="text/javascript" src="firetub.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://www.firebase.com/css/example.css">
+</head>
+<body>
+<input type='text' id='loginInput' placeholder='Login'>
+
+<script>
+var logins = new Firebase('https://placetalklogin.firebaseio.com/');
+
+  $('#loginInput').keypress(function (e) {
+    if (e.keyCode == 13) {
+      var login = $('#loginInput').val();
+      logins.push({login:login});
+      $('#messageInput').val('');
+    }
+  });
+
+
+logins.on('child_added', function(snapshot) {
+
+});
+
+var julieRef = new Firebase('https://placetalklogin.firebaseIO.com/users/' + login);
+julieRef.on('value', function(snapshot) {
+  if(snapshot.val() !== null) {
+    alert('Username taken, please choosen another login.');
+  } else {
+    var login = snapshot.val().name.login;
+    var lastName = snapshot.val().name.last;
+    alert('Your full name is: ' + login + ' ' + lastName);
+  }
+});
+
+
+</script>
+
+<div id='messagesDiv'></div>
+<input type='text' id='nameInput' placeholder='Name'>
+<input type='text' id='messageInput' placeholder='Message'>
+<input type='text' id='lat' placeholder='Latitude'>
+<input type='text' id='lon' placeholder='Longitude'>
+
+<script>
+
+  // Get a reference to the root of the chat data.
+  var messagesRef = new Firebase('https://placetalk.firebaseio.com/');
+
+  // When the user presses enter on the message input, write the message to firebase.
+  $('#messageInput').keypress(function (e) {
+    if (e.keyCode == 13) {
+      var name = $('#nameInput').val();
+      var text = $('#messageInput').val();
+      var lat = $('#lat').val();
+      var lon = $('#lon').val();
+      messagesRef.push({name:name, text:text, lat:lat, lon:lon});
+      $('#messageInput').val('');
+    }
+  });
+
+  // Add a callback that is triggered for each chat message.
+  messagesRef.limit(10).on('child_added', function (snapshot) {
+    var message = snapshot.val();
+    $('<div/>').text(message.text).prepend($('<em/>')
+      .text(message.name+': ')).appendTo($('#messagesDiv'));
+    $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+  });
+</script>
+</body>
+</html>
